@@ -9,7 +9,7 @@ import faang.school.projectservice.filter.project.ProjectFilter;
 import faang.school.projectservice.jpa.ProjectJpaRepository;
 import faang.school.projectservice.mapper.ProjectMapper;
 import faang.school.projectservice.model.Project;
-import faang.school.projectservice.publishers.ProjectEventPublisher;
+import faang.school.projectservice.publisher.ProjectEventPublisher;
 import faang.school.projectservice.validator.ProjectValidator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;

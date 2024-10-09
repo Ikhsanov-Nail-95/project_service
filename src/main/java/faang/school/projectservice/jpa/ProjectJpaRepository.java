@@ -37,6 +37,4 @@ public interface ProjectJpaRepository extends JpaRepository<Project, Long> {
     )
     List<Project> findProjectByTeamMember(long requestUserId);
 
-
 }
-

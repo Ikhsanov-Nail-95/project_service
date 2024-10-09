@@ -1,6 +1,5 @@
 package faang.school.projectservice.dto.moment;
 
-
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
