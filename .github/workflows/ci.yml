@@ -45,4 +45,4 @@ jobs:
           JDBC_URL: jdbc:postgresql://postgres:5432/testdb
           JDBC_USER: user
           JDBC_PASSWORD: password
-        run: ./gradlew testgradlew test
+        run: ./gradlew test
