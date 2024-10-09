@@ -14,7 +14,7 @@ jobs:
     #БД для тестирования в GitHubActions
     services:
       postgres:
-        image: postgres:13.3
+        image: postgres:12
         env:
           POSTGRES_DB: test_db
           POSTGRES_USER: user
