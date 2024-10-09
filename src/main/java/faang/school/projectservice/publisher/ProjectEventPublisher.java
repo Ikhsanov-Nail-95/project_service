@@ -1,4 +1,4 @@
-package faang.school.projectservice.publishers;
+package faang.school.projectservice.publisher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.projectservice.dto.project.ProjectEvent;
