@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProjectEventPublisher extends MessagePublisher<ProjectEvent> {
     public ProjectEventPublisher(RedisTemplate<String, Object> redisTemplate,
-                                 ChannelTopic projectTopic,
+                                 ChannelTopic projectCreatedEventTopic,
                                  ObjectMapper objectMapper) {
-        super(redisTemplate, projectTopic, objectMapper);
+        super(redisTemplate, projectCreatedEventTopic, objectMapper);
     }
 }
