@@ -21,11 +21,9 @@ spring:
     redis:
       port: 6379
       host: localhost
+      # Каналы для Pub/Sub механизма Redis
       channels:
-        project_channel:
-          name: project_channel
-        calculations_channel:
-          name: calculations_channel
+        project-created-event: "app:project:created"
 
 server:
   port: 8082
