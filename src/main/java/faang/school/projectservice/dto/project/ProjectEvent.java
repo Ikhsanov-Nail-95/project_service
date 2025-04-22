@@ -5,6 +5,7 @@ import lombok.*;
 @Setter
 @Getter
 @Builder
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectEvent {
