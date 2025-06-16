@@ -14,6 +14,7 @@ import faang.school.projectservice.validator.ProjectValidator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +22,17 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Service
+@Slf4j
 @RequiredArgsConstructor
+@Service
 public class ProjectService {
     private final ProjectJpaRepository projectJpaRepository;
     private final ProjectMapper projectMapper;
     private final ProjectValidator projectValidator;
-
+    private final ProjectEventPublisher projectEventPublisher;
+    private final List<ProjectFilter> projectFilters;
     @Value("#{new java.math.BigInteger('${storage.max_capacity}')}")
     private BigInteger maxCapacity;
-    private final ProjectEventPublisher projectEventPublisher;
-
-    private final List<ProjectFilter> projectFilters;
 
     public ProjectDto createProject(ProjectDto projectDto, long requestUserId) {
         if (projectJpaRepository.existsByOwnerIdAndName(requestUserId, projectDto.getName())) {
@@ -50,7 +50,7 @@ public class ProjectService {
     }
 
     public ProjectDto updateProject(long projectId, ProjectDto projectDto, long requestUserId) {
-        Project existingProject = findProjectOrThrowException(projectId);
+        Project existingProject = findProjectByIdOrThrow(projectId);
 
         projectValidator.checkUserIsMemberOrThrowException(existingProject, requestUserId);
 
@@ -87,24 +87,20 @@ public class ProjectService {
         return projectMapper.toDtoList(projectList);
     }
 
-    public ProjectDto getProjectById(long projectId, long requestUserId) {
-        Project project = findProjectOrThrowException(projectId);
+    public ProjectDto getProject(long projectId, long requestUserId) {
+        Project project = findProjectByIdOrThrow(projectId);
 
         projectValidator.checkUserIsMemberOrThrowException(project, requestUserId);
 
         return projectMapper.toDto(project);
     }
 
-    Project getProjectById(long projectId) {
-        return projectJpaRepository.findById(projectId).orElseThrow(EntityNotFoundException::new);
+    Project getProject(long projectId) {
+        return findProjectByIdOrThrow(projectId);
     }
 
     Project save(Project project) {
         return projectJpaRepository.save(project);
-    }
-
-    private Project findProjectOrThrowException(long projectId) {
-        return projectJpaRepository.findById(projectId).orElseThrow(() -> new EntityNotFoundException("Project with id " + projectId + " does not exist"));
     }
 
     public List<Project> getMomentProjectsEntity(MomentDto momentDto) {
@@ -113,6 +109,14 @@ public class ProjectService {
             throw new DataValidationException("Project does not exist");
         }
         return projectList;
+    }
+
+    private Project findProjectByIdOrThrow(long projectId) {
+        return projectJpaRepository.findById(projectId)
+                .orElseThrow(() -> {
+                    log.warn("Project not found: ID={}", projectId);
+                    return new EntityNotFoundException("Project not found");
+                });
     }
 
 }

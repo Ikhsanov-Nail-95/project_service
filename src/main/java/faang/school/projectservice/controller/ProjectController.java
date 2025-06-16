@@ -4,13 +4,12 @@ import faang.school.projectservice.dto.filter.ProjectFilterDto;
 import faang.school.projectservice.dto.project.ProjectDto;
 
 import java.util.List;
-import java.util.Optional;
 
 import faang.school.projectservice.exception.DataValidationException;
 import faang.school.projectservice.service.ProjectService;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +29,7 @@ public class ProjectController {
     @PostMapping
     public ProjectDto createProject(@RequestBody ProjectDto projectDto, @RequestParam(name = "ownerId") Long ownerId) {
         validateParameters(projectDto);
-        return projectService.createProject( projectDto, ownerId );
-
+        return projectService.createProject(projectDto, ownerId);
     }
 
     @PutMapping("/{projectId}")
@@ -39,7 +37,7 @@ public class ProjectController {
                                     @RequestBody ProjectDto projectDto,
                                     @RequestParam(name = "requestUserId") long requestUserId) {
         validateParameters(projectDto);
-        return projectService.updateProject( projectId, projectDto, requestUserId );
+        return projectService.updateProject(projectId, projectDto, requestUserId);
     }
 
     @GetMapping
@@ -51,24 +49,26 @@ public class ProjectController {
 
     @GetMapping("/all")
     public List<ProjectDto> getAllProjects(@RequestParam long requestUserId) {
-        return projectService.getAllProjects( requestUserId );
+        return projectService.getAllProjects(requestUserId);
     }
 
     @GetMapping("/{projectId}")
-    public ProjectDto getProjectById(@PathVariable long projectId, @RequestParam long requestUserId) {
-        return projectService.getProjectById( projectId, requestUserId );
+    public ProjectDto getProject(@PathVariable @Positive(message = "Project ID must be positive") long projectId,
+                                 @RequestParam long requestUserId
+    ) {
+        return projectService.getProject(projectId, requestUserId);
     }
 
     private void validateParameters(ProjectFilterDto filters) {
-        if (ObjectUtils.isEmpty(filters) || (filters.getNamePattern()==null && filters.getStatusPattern() == null)) {
+        if (ObjectUtils.isEmpty(filters) || (filters.getNamePattern() == null && filters.getStatusPattern() == null)) {
             throw new DataValidationException("Filters  must not be empty");
         }
     }
+
     private void validateParameters(ProjectDto projectDto) {
-        if (projectDto == null  || projectDto.getName() == null || projectDto.getDescription() == null ) {
+        if (projectDto == null || projectDto.getName() == null || projectDto.getDescription() == null) {
             throw new DataValidationException("Project name and description must not be empty");
         }
     }
-
 
 }
