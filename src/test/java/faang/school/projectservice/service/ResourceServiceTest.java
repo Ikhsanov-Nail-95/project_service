@@ -42,14 +42,14 @@ public class ResourceServiceTest extends SetUpFileForResource {
 
     @Test
     public void testUploadResource_StorageSizeExceeded() {
-        when(projectService.getProjectById(secondProject.getId())).thenReturn(secondProject);
+        when(projectService.getProject(secondProject.getId())).thenReturn(secondProject);
         when(resourceValidator.validateForTeamMemberExistence(userId, projectId)).thenReturn(firstTeamMember);
         assertThrows(SizeExceeded.class, () -> resourceService.uploadResource(projectId, file, userId));
     }
 
     @Test
     public void testUploadResource() {
-        when(projectService.getProjectById(firstProject.getId())).thenReturn(firstProject);
+        when(projectService.getProject(firstProject.getId())).thenReturn(firstProject);
         when(resourceValidator.validateForTeamMemberExistence(userId, projectId)).thenReturn(firstTeamMember);
         when(s3Service.uploadFile(file, folder)).thenReturn(firstResource);
         when(resourceRepository.save(firstResource)).thenReturn(firstResource);

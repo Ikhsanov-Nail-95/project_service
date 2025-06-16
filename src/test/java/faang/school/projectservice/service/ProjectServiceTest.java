@@ -236,7 +236,7 @@ public class ProjectServiceTest {
     public void testFindProjectById_ThrowsExceptionForNonExistingProject() {
         when(projectJpaRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows( EntityNotFoundException.class, () -> projectService.getProjectById( 1L, anyLong() ) );
+        assertThrows( EntityNotFoundException.class, () -> projectService.getProject( 1L, anyLong() ) );
         verifyNoInteractions(projectMapper);
     }
 

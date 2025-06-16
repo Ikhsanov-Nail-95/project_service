@@ -35,7 +35,7 @@ public class ResourceService {
 
     @Transactional
     public ResourceDto uploadResource(Long projectId, MultipartFile file, long userId) {
-        Project project = projectService.getProjectById(projectId);
+        Project project = projectService.getProject(projectId);
         TeamMember author = resourceValidator.validateForTeamMemberExistence(userId, projectId);
 
         BigInteger newStorageSize = project.getStorageSize().add(BigInteger.valueOf(file.getSize()));
